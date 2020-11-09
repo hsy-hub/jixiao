@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kpi.mapper.KpiGradeMapper">
+
+    <resultMap type="KpiGrade" id="KpiGradeResult">
+        <result property="id" column="id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="year" column="year"/>
+        <result property="semester" column="semester"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="score" column="score"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="details" column="details"/>
+    </resultMap>
+
+    <sql id="selectKpiGradeVo">
+        select id, nick_name, user_name, year, semester, dept_id, score, total_score, state, create_time, update_time, details from kpi_grade
+    </sql>
+
+    <insert id="allInsertKpiGrade" parameterType="list">
+
+        INSERT INTO kpi_grade (nick_name, user_name, year, semester, dept_id) VALUES
+
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.nickName},#{item.userName},#{item.year},#{item.semester},#{item.deptId}
+            )
+        </foreach>
+
+    </insert>
+
+
+<!--    <insert id="allInsertKpiGrade" parameterType="list" useGeneratedKeys="true" keyProperty="id">-->
+<!--&#45;&#45;         nick_name, user_name, year, semester, dept_id-->
+<!--        insert into kpi_grade(nick_name, user_name, year, semester, dept_id)-->
+<!--        values-->
+<!--        <foreach collection="list" item="item" separator=",">-->
+<!--            (-->
+<!--            #{nick_name},#{user_name},#{year},#{semester},#{dept_id}-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <delete id="deleteKpiGradeByIds" parameterType="String">
+        delete from kpi_grade where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertKpiGrade" parameterType="KpiGrade"  useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null and nickName != ''">nick_name,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="year != null and year != ''">year,</if>
+            <if test="semester != null">semester,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="score != null">score,</if>
+            <if test="totalScore != null">total_score,</if>
+            <if test="state != null">state,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="details != null">details,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null and nickName != ''">#{nickName},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="year != null and year != ''">#{year},</if>
+            <if test="semester != null">#{semester},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="score != null">#{score},</if>
+            <if test="totalScore != null">#{totalScore},</if>
+            <if test="state != null">#{state},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="details != null">#{details},</if>
+        </trim>
+    </insert>
+
+    <select id="selectKpiGradeList" parameterType="KpiGrade" resultMap="KpiGradeResult">
+        <include refid="selectKpiGradeVo"/>
+        <where>
+            <if test="nickName != null  and nickName != ''">and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="userName != null  and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+            <if test="year != null  and year != ''">and year = #{year}</if>
+            <if test="semester != null ">and semester = #{semester}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="score != null  and score != ''">and score = #{score}</if>
+            <if test="totalScore != null ">and total_score = #{totalScore}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="details != null  and details != ''">and details = #{details}</if>
+        </where>
+    </select>
+
+    <select id="selectKpiGradeById" parameterType="Long" resultMap="KpiGradeResult">
+        <include refid="selectKpiGradeVo"/>
+        where id = #{id}
+    </select>
+
+    <update id="updateKpiGrade" parameterType="KpiGrade">
+        update kpi_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="year != null and year != ''">year = #{year},</if>
+            <if test="semester != null">semester = #{semester},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="totalScore != null">total_score = #{totalScore},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="details != null">details = #{details},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiGradeById" parameterType="Long">
+        delete from kpi_grade where id = #{id}
+    </delete>
+
+
+
+</mapper>

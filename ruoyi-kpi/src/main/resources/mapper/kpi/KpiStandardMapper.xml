@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kpi.mapper.KpiStandardMapper">
+    
+    <resultMap type="KpiStandard" id="KpiStandardResult">
+        <result property="id"    column="id"    />
+        <result property="year"    column="year"    />
+        <result property="semester"    column="semester"    />
+        <result property="oneIndicator"    column="one_indicator"    />
+        <result property="twoIndicator"    column="two_indicator"    />
+        <result property="threeIndicator"    column="three_indicator"    />
+        <result property="grade"    column="grade"    />
+        <result property="details"    column="details"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectKpiStandardVo">
+        select id, year, semester, one_indicator, two_indicator, three_indicator, grade, details, create_time, update_time from kpi_standard
+    </sql>
+
+    <select id="selectKpiStandardList" parameterType="KpiStandard" resultMap="KpiStandardResult">
+        <include refid="selectKpiStandardVo"/>
+        <where>  
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            <if test="semester != null "> and semester = #{semester}</if>
+            <if test="oneIndicator != null  and oneIndicator != ''"> and one_indicator = #{oneIndicator}</if>
+            <if test="twoIndicator != null  and twoIndicator != ''"> and two_indicator = #{twoIndicator}</if>
+            <if test="threeIndicator != null  and threeIndicator != ''"> and three_indicator = #{threeIndicator}</if>
+            <if test="grade != null "> and grade = #{grade}</if>
+            <if test="details != null  and details != ''"> and details = #{details}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiStandardById" parameterType="Long" resultMap="KpiStandardResult">
+        <include refid="selectKpiStandardVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiStandard" parameterType="KpiStandard" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="year != null and year != ''">year,</if>
+            <if test="semester != null">semester,</if>
+            <if test="oneIndicator != null">one_indicator,</if>
+            <if test="twoIndicator != null">two_indicator,</if>
+            <if test="threeIndicator != null">three_indicator,</if>
+            <if test="grade != null">grade,</if>
+            <if test="details != null">details,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="year != null and year != ''">#{year},</if>
+            <if test="semester != null">#{semester},</if>
+            <if test="oneIndicator != null">#{oneIndicator},</if>
+            <if test="twoIndicator != null">#{twoIndicator},</if>
+            <if test="threeIndicator != null">#{threeIndicator},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="details != null">#{details},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiStandard" parameterType="KpiStandard">
+        update kpi_standard
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null and year != ''">year = #{year},</if>
+            <if test="semester != null">semester = #{semester},</if>
+            <if test="oneIndicator != null">one_indicator = #{oneIndicator},</if>
+            <if test="twoIndicator != null">two_indicator = #{twoIndicator},</if>
+            <if test="threeIndicator != null">three_indicator = #{threeIndicator},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="details != null">details = #{details},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiStandardById" parameterType="Long">
+        delete from kpi_standard where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiStandardByIds" parameterType="String">
+        delete from kpi_standard where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
